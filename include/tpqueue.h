@@ -1,56 +1,59 @@
 // Copyright 2021 NNTU-CS
-#ifndef INCLUDE_TPQUEUE_H_
-#define INCLUDE_TPQUEUE_H_
-#include <cassert>
-
 template<typename T>
 class TPQueue {
-  // Сюда помещается описание структуры "Очередь с приоритетами"
  private:
-    T* arr;
+    T *arr;
     int size;
-    int begin,
-        end;
+    int begin, end;
     int count;
  public:
-TPQueue();
+    TPQueue();
     ~TPQueue();
-    void push(const T&);
+    void push(const T &);
     T pop();
     T get() const;
-    bool isEmpty() const;
     bool isFull() const;
+    bool isEmpty() const;
 };
 
-template<typename T> TPQueue<T>::TPQueue() : size(100),
-begin(0), end(0), count(0) {
+template<typename T>
+TPQueue<T>::TPQueue():
+    size(100),
+    begin(0), end(0), count(0) {
     arr = new T[size + 1];
 }
-template<typename T> TPQueue<T>::~TPQueue() {
-    delete[] arr;
+template<typename T>
+TPQueue<T>::~TPQueue() {
+    delete [] arr;
 }
-template<typename T> void TPQueue<T>::push(const T& item) {
-    assert(count < size);
-    if (end != 0) {
-        for (int i = end - 1; i > -1; --i) {
-            if (arr[i].prior >= item.prior) {
-                arr[i + 1] = item;
-                continue;
-            }
-            if (arr[i].prior < item.prior) {
-                arr[i + 1] = arr[i];
-                if (i == 0)
-                    arr[i] = item;
-                continue;
-            }
+
+template<typename T>
+void TPQueue<T>::push(const T & item) {
+  assert(count < size);
+  if (count != 0) {
+    for (int i = end - 1; i >= begin; i--) {
+        if (arr[i].prior >= item.prior) {
+          arr[i + 1] = item;
+          break;
         }
-    } else {
-        arr[begin] = item;
+        if (arr[i].prior < item.prior) {
+          arr[i + 1] = arr[i];
+        }
+        if (begin == i) {
+          arr[i] = item;
+        }
     }
-    count++;
-    end++;
+  } else {
+     arr[begin] = item;
+  }
+  end++;
+  count++;
+  if (end > size) {
+    end -= size + 1;
+  }
 }
-template<typename T> T TPQueue<T>::pop() {
+template<typename T>
+T TPQueue<T>::pop() {
     assert(count > 0);
     T item = arr[begin++];
     count--;
@@ -64,18 +67,16 @@ T TPQueue<T>::get() const {
     return arr[begin];
 }
 template<typename T>
-bool TPQueue<T>::isEmpty() const {
-    return count == 0;
+bool TPQueue<T>::isFull() const {
+  return count == size;
 }
 template<typename T>
-bool TPQueue<T>::isFull() const {
-    return count == size;
+bool TPQueue<T>::isEmpty() const {
+  return count == 0;
 }
 struct SYM {
   char ch;
   int  prior;
-    char ch;
-    int  prior;
 };
 
-#endif // INCLUDE_TPQUEUE_H
+#endif // INCLUDE_TPQUEUE_H_
