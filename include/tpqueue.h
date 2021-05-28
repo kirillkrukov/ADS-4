@@ -15,7 +15,6 @@ class TPQueue {
     bool isFull() const;
     bool isEmpty() const;
 };
-
 template<typename T>
 TPQueue<T>::TPQueue():
     size(100),
@@ -26,7 +25,6 @@ template<typename T>
 TPQueue<T>::~TPQueue() {
     delete [] arr;
 }
-
 template<typename T>
 void TPQueue<T>::push(const T & item) {
   assert(count < size);
@@ -78,5 +76,4 @@ struct SYM {
   char ch;
   int  prior;
 };
-
 #endif // INCLUDE_TPQUEUE_H_
